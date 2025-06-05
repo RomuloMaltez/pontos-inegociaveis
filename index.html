@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pontos Inegociáveis - Administração Tributária</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            animation: slideDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .urgencia-banner {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .card-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .fundamentacao {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .detalhes {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            animation: slideIn 0.3s ease;
+        }
+
+        .detalhes.active {
+            display: block;
+        }
+
+        .btn-detalhes {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-detalhes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .resumo-executivo {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .resumo-executivo h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .beneficios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .beneficio {
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #667eea30;
+        }
+
+        .beneficio-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .beneficio h4 {
+            color: white;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .beneficio p {
+            font-weight: bold;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .resumo-modal h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-right: 40px;
+        }
+
+        .resumo-modal ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .resumo-modal li {
+            margin-bottom: 8px;
+        }
+
+        .resumo-modal .ponto-titulo {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .resumo-modal .beneficios-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .card {
+            animation: slideIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>4 PONTOS INEGOCIÁVEIS</h1>
+            <p>Administração Tributária Municipal</p>
+        </div>
+
+    <!-- Modal do Resumo Executivo -->
+    <div id="modalResumo" class="modal">
+        <div class="modal-content resumo-modal">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2>📋 RESUMO EXECUTIVO - PONTOS INEGOCIÁVEIS</h2>
+            
+            <div class="ponto-titulo">1️⃣ LEI ESPECÍFICA DA ADMINISTRAÇÃO TRIBUTÁRIA</div>
+            <ul>
+                <li><strong>Fundamentação:</strong> Art. 37, XXII, CF/88 - Carreiras específicas para atividades essenciais</li>
+                <li><strong>Status:</strong> Imperativo constitucional que exige regulamentação</li>
+                <li><strong>Necessidade:</strong> Estruturação adequada das carreiras tributárias municipais</li>
+                <li><strong>Precedentes:</strong> Receita Federal (Lei nº 10.593/2002), Estado do Acre (Lei nº 4.294/2023)</li>
+            </ul>
+
+            <div class="ponto-titulo">2️⃣ ATUALIZAÇÃO DA TABELA PONTO-TAREFA</div>
+            <ul>
+                <li><strong>Fundamentação:</strong> Art. 37, caput, CF/88 - Princípio da eficiência administrativa</li>
+                <li><strong>Problema:</strong> Tabela defasada há anos, não reflete atividades modernas</li>
+                <li><strong>Impacto:</strong> Distorções na avaliação, desmotivação dos servidores</li>
+                <li><strong>Urgência:</strong> Compromete eficiência arrecadatória e pode gerar questionamentos judiciais</li>
+            </ul>
+
+            <div class="ponto-titulo">3️⃣ ISONOMIA DE TRÊS CLASSES (A, B, C)</div>
+            <ul>
+                <li><strong>Fundamentação:</strong> Art. 5º, caput e Art. 39, § 1º, CF/88 - Princípio da isonomia</li>
+                <li><strong>Violação Atual:</strong> Lei Complementar nº 983/2024 criou 5 classes apenas para carreiras tributárias</li>
+                <li><strong>Consequência:</strong> 40 anos para alcançar topo vs. 30-35 anos para aposentadoria</li>
+                <li><strong>Solução:</strong> Restauração da estrutura de 3 classes sem impacto financeiro</li>
+            </ul>
+
+            <div class="ponto-titulo">4️⃣ EXCLUSIVIDADE DE OCUPAÇÃO DOS CARGOS TÉCNICOS</div>
+            <ul>
+                <li><strong>Fundamentação:</strong> Art. 198, CTN - Sigilo fiscal e competência técnica especializada</li>
+                <li><strong>Cargos:</strong> Subsecretário-Auditor, Diretor-Auditor, Gerentes-Auditor</li>
+                <li><strong>Necessidade:</strong> Proteção de informações sensíveis e decisões técnicas complexas</li>
+                <li><strong>Risco:</strong> Ocupação por terceiros compromete sigilo e competência técnica</li>
+            </ul>
+
+            <div class="beneficios-section">
+                <h3>🎯 BENEFÍCIOS ESPERADOS</h3>
+                <ul>
+                    <li>✅ <strong>Maior eficiência na arrecadação tributária</strong></li>
+                    <li>✅ <strong>Redução de questionamentos judiciais</strong></li>
+                    <li>✅ <strong>Conformidade com determinações TCE-RO e MP-RO</strong></li>
+                    <li>✅ <strong>Profissionalização da gestão fiscal</strong></li>
+                    <li>✅ <strong>Fortalecimento institucional</strong></li>
+                    <li>✅ <strong>Incremento da receita municipal</strong></li>
+                    <li>✅ <strong>Maior segurança jurídica para contribuintes e servidores</strong></li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <strong>⚠️ URGÊNCIA:</strong> Determinações do Tribunal de Contas do Estado de Rondônia (Processo nº 03912/2024-TCERO) 
+                e do Ministério Público Estadual (Procedimento Notícia de Fato nº 2024.0001.003.64617) conferem caráter de urgência 
+                à implementação imediata dessas medidas.
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                <a href="#" id="btnDownload" class="btn-download" onclick="downloadDocumento()">
+                    📄 Download do Documento Oficial Completo
+                </a>
+                <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                    Documento Técnico-Legal com fundamentação jurídica completa
+                </p>
+            </div>
+        </div>
+    </div>
+
+        <div class="urgencia-banner">
+            ⚠️ URGENTE: Determinações TCE-RO (Processo nº 03912/2024) e MP-RO (Notícia de Fato nº 2024.0001.003.64617)
+        </div>
+
+        <div class="resumo-executivo">
+            <h2>🎯 Objetivo</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #34495e;">
+                Estruturar a administração tributária municipal em conformidade com a <strong>Constituição Federal</strong>, 
+                garantindo <strong>eficiência</strong>, <strong>isonomia</strong> e <strong>profissionalização</strong> 
+                da gestão fiscal.
+            </p>
+        </div>
+
+        <div class="cards-container">
+            <div class="card" onclick="toggleDetalhes(1)">
+                <div class="card-number">1º</div>
+                <h3>📋 Lei Específica da Administração Tributária</h3>
+                <p><strong>Imperativo constitucional:</strong> Carreiras específicas para atividades essenciais ao Estado</p>
+                <div class="fundamentacao">
+                    <strong>Base Legal:</strong> Art. 37, XXII, CF/88
+                </div>
+                <button class="btn-detalhes">Ver Detalhes Técnicos</button>
+                <div class="detalhes" id="detalhes1">
+                    <h4>🔍 Detalhamento Técnico:</h4>
+                    <p><strong>Necessidades de Aperfeiçoamento:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Exigência de graduação em áreas afins para auditores</li>
+                        <li>Remoção de exigências desproporcionais (experiência de 10 anos)</li>
+                        <li>Implementação de tabela de ponto-tarefa atualizada</li>
+                        <li>Profissionalização da gestão técnica</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><strong>Precedentes:</strong> Receita Federal (Lei nº 10.593/2002), Estado do Acre (Lei nº 4.294/2023)</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="toggleDetalhes(2)">
+                <div class="card-number">2º</div>
+                <h3>📊 Atualização da Tabela Ponto-Tarefa</h3>
+                <p><strong>Situação crítica:</strong> Tabela defasada há anos, não reflete atividades modernas</p>
+                <div class="fundamentacao">
+                    <strong>Base Legal:</strong> Art. 37, caput, CF/88 - Princípio da Eficiência
+                </div>
+                <button class="btn-detalhes">Ver Detalhes Técnicos</button>
+                <div class="detalhes" id="detalhes2">
+                    <h4>🔍 Problemas Identificados:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Pontuação para contagem manual de notas fiscais (obsoleto)</li>
+                        <li>Previsão de retificação via disquetes/CD-ROM (tecnologia ultrapassada)</li>
+                        <li>Ausência de pontuação para atividades modernas (fiscalização eletrônica, big data)</li>
+                    </ul>
+                    <h4 style="margin-top: 15px;">✅ Soluções Necessárias:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Procedimentos fiscais regulamentados</li>
+                        <li>Atividades de inteligência fiscal</li>
+                        <li>Acompanhamento de grandes contribuintes</li>
+                        <li>Fiscalização eletrônica e cruzamento de dados</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" onclick="toggleDetalhes(3)">
+                <div class="card-number">3º</div>
+                <h3>⚖️ Isonomia de Três Classes (A, B, C)</h3>
+                <p><strong>Problema atual:</strong> Extensão para 5 classes viola princípio da isonomia</p>
+                <div class="fundamentacao">
+                    <strong>Base Legal:</strong> Art. 5º, caput e Art. 39, § 1º, CF/88
+                </div>
+                <button class="btn-detalhes">Ver Detalhes Técnicos</button>
+                <div class="detalhes" id="detalhes3">
+                    <h4>🔍 Análise do Problema:</h4>
+                    <p><strong>Lei Complementar nº 983/2024:</strong> Criou classes A, B, C, D, E apenas para carreiras tributárias</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Impacto:</strong> 40 anos para alcançar topo da carreira</li>
+                        <li><strong>Contradição:</strong> Aposentadoria em 30-35 anos de contribuição</li>
+                        <li><strong>Consequência:</strong> Desmotivação e questionamentos judiciais</li>
+                    </ul>
+                    <h4 style="margin-top: 15px;">✅ Benefícios da Restauração:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Isonomia com demais carreiras municipais</li>
+                        <li>Progressão em prazo razoável</li>
+                        <li><strong>SEM IMPACTO FINANCEIRO:</strong> Apenas reorganização</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" onclick="toggleDetalhes(4)">
+                <div class="card-number">4º</div>
+                <h3>🔒 Exclusividade de Cargos Técnicos</h3>
+                <p><strong>Necessidade essencial:</strong> Proteção do sigilo fiscal e competência técnica</p>
+                <div class="fundamentacao">
+                    <strong>Base Legal:</strong> Art. 198, CTN - Sigilo Fiscal
+                </div>
+                <button class="btn-detalhes">Ver Detalhes Técnicos</button>
+                <div class="detalhes" id="detalhes4">
+                    <h4>🔍 Fundamentação:</h4>
+                    <p><strong>Cargos Abrangidos:</strong> Subsecretário-Auditor, Diretor-Auditor, Gerentes-Auditor</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Sigilo Fiscal:</strong> Crime violação (Art. 325, Código Penal)</li>
+                        <li><strong>Competência Técnica:</strong> Decisões complexas em tributação</li>
+                        <li><strong>Continuidade:</strong> Preservação do conhecimento institucional</li>
+                    </ul>
+                    <h4 style="margin-top: 15px;">⚠️ Problemas da Ocupação por Terceiros:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Incapacidade de elaborar planos estratégicos</li>
+                        <li>Dificuldades em homologar pareceres fiscais</li>
+                        <li>Risco de vazamento de informações sigilosas</li>
+                        <li>Ausência de legado técnico</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="beneficios">
+            <div class="beneficio">
+                <div class="beneficio-icon">💰</div>
+                <h4>Maior Arrecadação</h4>
+                <p>Eficiência na cobrança e fiscalização</p>
+            </div>
+            <div class="beneficio">
+                <div class="beneficio-icon">⚖️</div>
+                <h4>Segurança Jurídica</h4>
+                <p>Redução de questionamentos judiciais</p>
+            </div>
+            <div class="beneficio">
+                <div class="beneficio-icon">🎯</div>
+                <h4>Profissionalização</h4>
+                <p>Gestão técnica especializada</p>
+            </div>
+            <div class="beneficio">
+                <div class="beneficio-icon">🤝</div>
+                <h4>Conformidade</h4>
+                <p>Atendimento às determinações TCE e MP</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>🚀 AÇÃO NECESSÁRIA</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 10px;">
+                <strong>Implementação URGENTE</strong> dos 4 pontos inegociáveis
+            </p>
+            <p style="opacity: 0.9;">
+                Cumprimento dos prazos estabelecidos pelo TCE-RO e MP-RO
+            </p>
+            <button class="cta-button" onclick="mostrarResumo()">
+                📋 Ver Resumo Executivo
+            </button>
+        </div>
+
+        <div class="footer">
+            <p>Documento Técnico-Legal | DEF/SUREM | Junho 2025</p>
+            <p>Fundamentado na CF/88, EC nº 132/2023 e legislação infraconstitucional</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetalhes(numero) {
+            const detalhes = document.getElementById(`detalhes${numero}`);
+            const button = detalhes.previousElementSibling;
+            
+            if (detalhes.classList.contains('active')) {
+                detalhes.classList.remove('active');
+                button.textContent = 'Ver Detalhes Técnicos';
+            } else {
+                // Fechar outros detalhes abertos
+                document.querySelectorAll('.detalhes.active').forEach(d => {
+                    d.classList.remove('active');
+                    d.previousElementSibling.textContent = 'Ver Detalhes Técnicos';
+                });
+                
+                detalhes.classList.add('active');
+                button.textContent = 'Ocultar Detalhes';
+            }
+        }
+
+        function mostrarResumo() {
+            document.getElementById('modalResumo').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Previne scroll do body
+        }
+
+        function fecharModal() {
+            document.getElementById('modalResumo').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restaura scroll do body
+        }
+
+        // Fechar modal clicando fora dele
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalResumo');
+            if (event.target === modal) {
+                fecharModal();
+            }
+        }
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                fecharModal();
+            }
+        });
+
+        function downloadDocumento() {
+            // SUBSTITUA A URL ABAIXO PELA URL DO SEU REPOSITÓRIO
+            const urlDocumento = "https://docs.google.com/document/d/1GnIe2QnnfWqKSZFXJwyebddoHo8jwN9dLLuO-cn42yA/edit?usp=sharing";
+            
+            // Opcional: mostrar mensagem antes do download
+            const confirmar = confirm("Você será redirecionado para o download do documento oficial completo. Continuar?");
+            
+            if (confirmar) {
+                // Abre o link em nova aba
+                window.open(urlDocumento, '_blank');
+            }
+        }
+
+        // Animação suave ao carregar
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+
+        // Inicializar cards com opacity 0
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+        });
+    </script>
+</body>
+</html>
